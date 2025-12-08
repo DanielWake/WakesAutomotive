@@ -1,0 +1,267 @@
+Nice — here’s a concrete, ready-to-use .NET 8 / ASP.NET Core MVC design for a multi-area local-SEO site (e.g. “ in Portsmouth”, “Fareham plumber”, etc.). I’ll give you:
+	•	architecture + data model
+	•	Program.cs routing & controller patterns (dynamic area pages)
+	•	sample Entity models + EF Core schema
+	•	Razor view examples (meta tags, canonical, JSON-LD LocalBusiness)
+	•	sitemap & SEO helpers (how to generate sitemap.xml, unique content snippets)
+	•	deployment & SEO checklist
+
+I’ll include short, copy-pasteable code you can drop into a new .NET 8 project.
+
+Sources (for routing, sitemaps and structured data): Microsoft docs on routing & endpoints, Google’s LocalBusiness JSON-LD guidance, established sitemap and schema examples.  ￼
+
+⸻
+
+1 — High-level architecture
+	•	ASP.NET Core 8 MVC app (Controllers + Razor Views)
+	•	EF Core (SQL Server / PostgreSQL) for data: Services, Locations, Snippets, Pages, Testimonials, SEO metadata
+	•	Admin area (CMS-lite) to edit snippets and override metadata for specific locations/services
+	•	Middleware for canonical headers, robots, JSON-LD injection, sitemap endpoint
+	•	Background job (e.g., Hangfire or worker service) to pre-render / validate/update sitemap when location/service data changes
+
+Why MVC? Clean separation, server-rendered HTML (excellent for SEO), easy templating + tag helpers, full control of meta/canonical/structured data. (Docs: routing & endpoints).  ￼
+
+⸻
+
+2 — Database / domain model (EF Core)
+
+public class Service
+{
+    public int Id { get; set; }
+    public string Slug { get; set; }           // "plumbing-repair"
+    public string Title { get; set; }          // "Plumbing repair"
+    public string Summary { get; set; }
+}
+
+public class Location
+{
+    public int Id { get; set; }
+    public string Slug { get; set; }           // "portsmouth"
+    public string Name { get; set; }           // "Portsmouth"
+    public string County { get; set; }         // "Hampshire"
+    public string PostcodePrefix { get; set; } // optional
+}
+
+public class ServiceLocationPage
+{
+    public int Id { get; set; }
+    public int ServiceId { get; set; }
+    public Service Service { get; set; }
+    public int LocationId { get; set; }
+    public Location Location { get; set; }
+
+    // SEO fields - editable
+    public string TitleTag { get; set; }
+    public string MetaDescription { get; set; }
+    public string H1 { get; set; }
+    public string BodyHtml { get; set; }         // unique content for this (service,location)
+    public string CanonicalUrl { get; set; }
+    public DateTime LastUpdated { get; set; }
+}
+
+Store small content snippets and templates the editor can combine into pages to keep uniqueness while scaling.
+
+⸻
+
+3 — Routing & URL design
+
+Use clean, SEO-friendly routes:
+
+/services/{serviceSlug}/{locationSlug}   -> /services/plumbing/portsmouth
+/services/{serviceSlug}                  -> service landing
+/locations/{locationSlug}                -> location landing
+
+Use attribute routing for clarity and control. (Docs: attribute routing & endpoints).  ￼
+
+Program.cs (minimal example)
+
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<AppDbContext>(options => 
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+
+var app = builder.Build();
+app.UseStaticFiles();
+app.UseRouting();
+app.MapControllerRoute(
+    name: "serviceLocation",
+    pattern: "services/{serviceSlug}/{locationSlug}",
+    defaults: new { controller = "Service", action = "Location" });
+app.MapControllerRoute(
+    name: "service",
+    pattern: "services/{serviceSlug}",
+    defaults: new { controller = "Service", action = "Index" });
+app.MapDefaultControllerRoute();
+app.Run();
+
+
+⸻
+
+4 — Controller example
+
+public class ServiceController : Controller
+{
+    private readonly AppDbContext _db;
+    private readonly SeoService _seo;
+
+    public ServiceController(AppDbContext db, SeoService seo) { _db = db; _seo = seo; }
+
+    [HttpGet]
+    public async Task<IActionResult> Location(string serviceSlug, string locationSlug)
+    {
+        var page = await _db.ServiceLocationPages
+            .Include(p => p.Service).Include(p => p.Location)
+            .FirstOrDefaultAsync(p => p.Service.Slug == serviceSlug && p.Location.Slug == locationSlug);
+
+        if (page == null) return NotFound();
+
+        _seo.SetMeta(
+            title: page.TitleTag ?? $"{page.Service.Title} in {page.Location.Name}",
+            description: page.MetaDescription,
+            canonical: page.CanonicalUrl ?? Url.Action("Location", "Service", new { serviceSlug, locationSlug }, Request.Scheme)
+        );
+
+        var jsonLd = _seo.BuildLocalBusinessJsonLd(page); // inject structured data
+        ViewData["JsonLd"] = jsonLd;
+
+        return View(page);
+    }
+}
+
+The SeoService centralises meta/canonical/JSON-LD generation. Keep canonical logic consistent to avoid duplicate content problems (canonical best practices).  ￼
+
+⸻
+
+5 — Razor layout: meta tags, canonical, JSON-LD
+
+_Layout.cshtml (snippets)
+
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] ?? "Default Title"</title>
+    <meta name="description" content="@ViewData["Description"]" />
+    <link rel="canonical" href="@ViewData["Canonical"]" />
+    @* Open Graph, Twitter cards ... *@
+    @if (ViewData["JsonLd"] is string jsonLd) {
+        <script type="application/ld+json">@Html.Raw(jsonLd)</script>
+    }
+</head>
+
+
+⸻
+
+6 — JSON-LD LocalBusiness (generate per location/service)
+
+Use Google’s recommended LocalBusiness JSON-LD schema for local SEO. Include accurate address, telephone, areaServed and url. Use AreaServed to list towns/counties you serve. (Google docs + Schema.org).  ￼
+
+Example generator (simplified):
+
+public string BuildLocalBusinessJsonLd(ServiceLocationPage page)
+{
+    var ld = new {
+        @context = "https://schema.org",
+        @type = "LocalBusiness",
+        name = $"{page.Service.Title} — {page.Location.Name}",
+        url = page.CanonicalUrl ?? UrlForPage(page),
+        telephone = "+44 1234 567890",
+        address = new {
+            @type = "PostalAddress",
+            addressLocality = page.Location.Name,
+            addressRegion = page.Location.County,
+            addressCountry = "UK"
+        },
+        areaServed = new [] { page.Location.Name, page.Location.County }
+    };
+    return JsonSerializer.Serialize(ld, new JsonSerializerOptions { WriteIndented = false });
+}
+
+
+⸻
+
+7 — Programmatic sitemap generation
+
+Sitemap must include every (service, location) page. Use a library (DotNetSitemapGenerator / Sidio.Sitemap) or write a simple endpoint that outputs XML from DB rows. See established samples and NuGet packages.  ￼
+
+Simple controller action for /sitemap.xml:
+
+[Route("sitemap.xml")]
+public async Task<IActionResult> Sitemap()
+{
+    var pages = await _db.ServiceLocationPages.Include(p=>p.Service).Include(p=>p.Location).ToListAsync();
+    var sb = new StringBuilder();
+    sb.AppendLine(@"<?xml version=""1.0"" encoding=""utf-8""?>");
+    sb.AppendLine(@"<urlset xmlns=""http://www.sitemaps.org/schemas/sitemap/0.9"">");
+    foreach(var p in pages) {
+        var url = Url.Action("Location","Service", new { serviceSlug = p.Service.Slug, locationSlug = p.Location.Slug }, Request.Scheme);
+        sb.AppendLine("<url>");
+        sb.AppendLine($"  <loc>{System.Net.WebUtility.HtmlEncode(url)}</loc>");
+        sb.AppendLine($"  <lastmod>{p.LastUpdated:yyyy-MM-dd}</lastmod>");
+        sb.AppendLine("</url>");
+    }
+    sb.AppendLine("</urlset>");
+    return Content(sb.ToString(), "application/xml", Encoding.UTF8);
+}
+
+
+⸻
+
+8 — Making many unique pages at scale (content strategy in code)
+
+Don’t just duplicate a template replacing the town name. Instead:
+	•	Store reusable snippets (intro, features, testimonials) and pick 2–3 per page programmatically.
+	•	Allow manual overrides per ServiceLocationPage for H1, meta, and body.
+	•	Use a ContentRenderer to stitch snippets into the final HTML and inject local facts (e.g., nearest train station, case study lines).
+	•	Track LastUpdated to show freshness.
+
+This reduces thin/duplicate content while scaling. Tools and plugins exist to help with snippet management; implement a lightweight WYSIWYG in the admin area for exceptions.
+
+⸻
+
+9 — SEO extras to implement
+	•	Title templates: {{Service}} in {{Location}} | CompanyName (keep titles < 60 chars). Use tag helpers to enforce. (Tag helpers help dynamic meta generation).  ￼
+	•	Meta description per page (< 160 chars).
+	•	Canonical tags for near-duplicate pages and paginated lists.  ￼
+	•	Hreflang only if bilingual / multi-region (not needed for UK-only).
+	•	Structured data: LocalBusiness JSON-LD on all location pages.  ￼
+	•	XML sitemap and robots.txt (point to sitemap).  ￼
+	•	Fast performance (server-side rendering, CDN for static assets).
+	•	Mobile-first responsive design.
+
+⸻
+
+10 — Admin / content workflow
+	•	CMS area to edit Service, Location, and ServiceLocationPage content & SEO metadata.
+	•	Preview page rendering in admin (to check meta, schema, canonical).
+	•	Validation to ensure unique titles and meta descriptions where possible.
+	•	Export CSV of pages for bulk editing if marketing wants to batch update meta.
+
+⸻
+
+11 — Example: Quick end-to-end file list to implement
+	•	Models/Service.cs, Models/Location.cs, Models/ServiceLocationPage.cs
+	•	Data/AppDbContext.cs (EF Core)
+	•	Services/SeoService.cs (meta + JSON-LD + canonical helper)
+	•	Controllers/ServiceController.cs (Location action)
+	•	Controllers/SitemapController.cs (/sitemap.xml)
+	•	Views/Service/Location.cshtml (renders H1, content, structured data from ViewData)
+	•	Areas/Admin/... for CMS editing
+
+⸻
+
+12 — Quick checklist while developing & launching
+	•	All (service,location) pages reachable in sitemap.
+	•	Unique title & meta description per page where possible.
+	•	JSON-LD LocalBusiness present and accurate.  ￼
+	•	Canonical tags present.  ￼
+	•	robots.txt allows crawlers to sitemap.
+	•	Test pages with Google Rich Results and mobile-friendly test.
+	•	Monitor Search Console for indexing issues.
+
+⸻
+
+13 — Next steps I can do right away (pick one)
+	•	Produce a full starter .NET 8 solution with the models, controllers, SEO service and a seeded database for 5 services × 10 locations (code + EF migrations).
+	•	Or: write a detailed SeoService class (with canonical logic, JSON-LD templates, meta helpers, and Razor tag helpers).
+	•	Or: create an admin UI wireframe and EF migrations to manage snippets and pages.
+
+Tell me which of the three you want and I’ll paste the full code for it (complete files you can drop into a .NET 8 project).
