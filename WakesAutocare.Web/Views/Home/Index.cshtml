@@ -72,6 +72,64 @@
     </div>
 </section>
 
+<section class="brands-section" style="background: var(--light-bg);">
+    <div class="container">
+        <h2>Experience You Can Trust</h2>
+        <p class="section-intro">Our technicians have trained and worked with premium automotive brands</p>
+        <div class="brands-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 30px; margin-top: 40px;">
+            <div class="brand-item" style="text-align: center; padding: 20px;">
+                <i class="fa fa-car" style="font-size: 2.5rem; color: var(--text-light); margin-bottom: 10px;"></i>
+                <h4 style="color: var(--secondary-color); margin: 10px 0 5px;">Rolls Royce</h4>
+                <p style="color: var(--text-light); font-size: 0.9rem;">Luxury Expertise</p>
+            </div>
+            <div class="brand-item" style="text-align: center; padding: 20px;">
+                <i class="fa fa-car" style="font-size: 2.5rem; color: var(--text-light); margin-bottom: 10px;"></i>
+                <h4 style="color: var(--secondary-color); margin: 10px 0 5px;">BMW</h4>
+                <p style="color: var(--text-light); font-size: 0.9rem;">German Engineering</p>
+            </div>
+            <div class="brand-item" style="text-align: center; padding: 20px;">
+                <i class="fa fa-car" style="font-size: 2.5rem; color: var(--text-light); margin-bottom: 10px;"></i>
+                <h4 style="color: var(--secondary-color); margin: 10px 0 5px;">Land Rover</h4>
+                <p style="color: var(--text-light); font-size: 0.9rem;">4x4 Specialists</p>
+            </div>
+            <div class="brand-item" style="text-align: center; padding: 20px;">
+                <i class="fa fa-car" style="font-size: 2.5rem; color: var(--text-light); margin-bottom: 10px;"></i>
+                <h4 style="color: var(--secondary-color); margin: 10px 0 5px;">Volkswagen</h4>
+                <p style="color: var(--text-light); font-size: 0.9rem;">European Standards</p>
+            </div>
+            <div class="brand-item" style="text-align: center; padding: 20px;">
+                <i class="fa fa-car" style="font-size: 2.5rem; color: var(--text-light); margin-bottom: 10px;"></i>
+                <h4 style="color: var(--secondary-color); margin: 10px 0 5px;">Ford</h4>
+                <p style="color: var(--text-light); font-size: 0.9rem;">Popular Models</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="what-we-offer">
+    <div class="container">
+        <h2>What Sets Us Apart</h2>
+        <div style="max-width: 900px; margin: 0 auto;">
+            <div class="offer-content" style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px;">
+                <div>
+                    <h3 style="color: var(--primary-color); margin-bottom: 15px;"><i class="fa fa-tools" style="margin-right: 10px;"></i>Professional Service</h3>
+                    <p style="margin-bottom: 20px; line-height: 1.8;">From routine servicing to complex diagnostics and major repairs, we handle all your automotive needs with precision and care. Using the latest diagnostic equipment and genuine parts, your vehicle is in expert hands.</p>
+
+                    <h3 style="color: var(--primary-color); margin-bottom: 15px;"><i class="fa fa-map-marked-alt" style="margin-right: 10px;"></i>Convenient Mobile Service</h3>
+                    <p style="line-height: 1.8;">Can't get to us? No problem. Our fully-equipped mobile service brings professional automotive care directly to your door across Portsmouth, Waterlooville, and the entire South Coast.</p>
+                </div>
+                <div>
+                    <h3 style="color: var(--primary-color); margin-bottom: 15px;"><i class="fa fa-pound-sign" style="margin-right: 10px;"></i>Transparent Pricing</h3>
+                    <p style="margin-bottom: 20px; line-height: 1.8;">We believe in honest, upfront pricing with no hidden costs. Get a detailed quote before any work begins, and rest assured you're getting quality service at competitive rates.</p>
+
+                    <h3 style="color: var(--primary-color); margin-bottom: 15px;"><i class="fa fa-handshake" style="margin-right: 10px;"></i>Customer First</h3>
+                    <p style="line-height: 1.8;">As a family-run business, we treat every customer's vehicle as if it were our own. Check out our Facebook reviews to see what our satisfied customers have to say.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 @if (caseStudies.Any())
 {
     <section class="case-studies-section">
@@ -93,9 +151,23 @@
                     </div>
                 }
             </div>
-            <div class="text-center">
-                <a asp-controller="CaseStudy" asp-action="Index" class="btn btn-secondary">
-                    View All Case Studies
+            <div class="text-center" style="margin-top: 40px;">
+                <a asp-controller="CaseStudy" asp-action="Index" class="btn btn-link" style="font-size: 1.1rem;">
+                    View All Case Studies <i class="fa fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+}
+@if (!caseStudies.Any())
+{
+    <section class="portfolio-teaser" style="background: var(--light-bg);">
+        <div class="container">
+            <h2>Our Work Speaks For Itself</h2>
+            <p class="section-intro">From clutch replacements to wet belt changes, diagnostics to full services - we've handled it all. Check out our Facebook page for photos and reviews of recent work, or give us a call to discuss your vehicle's needs.</p>
+            <div class="text-center" style="margin-top: 30px;">
+                <a href="tel:07544064878" class="btn btn-primary">
+                    <i class="fa fa-phone"></i> Call 07544 064878
                 </a>
             </div>
         </div>
