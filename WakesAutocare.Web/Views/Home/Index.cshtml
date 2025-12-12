@@ -1,0 +1,118 @@
+@{
+    var services = ViewBag.Services as List<Service> ?? new List<Service>();
+    var caseStudies = ViewBag.CaseStudies as List<CaseStudy> ?? new List<CaseStudy>();
+}
+
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1>Professional Automotive Services Across the South Coast</h1>
+            <p class="lead">IMI & ATA accredited technicians with 27 years combined experience</p>
+            <p>Specializing in diagnostics, servicing, clutches, timing belts, and repairs</p>
+            <div class="hero-actions">
+                <a href="tel:07544064878" class="btn btn-primary">
+                    <i class="fa fa-phone"></i> Call 07544 064878
+                </a>
+                <a asp-controller="Home" asp-action="Contact" class="btn btn-secondary">
+                    Get a Quote
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="services-section">
+    <div class="container">
+        <h2>Our Services</h2>
+        <p class="section-intro">From diagnostics to complete servicing, we handle all your automotive needs</p>
+        <div class="services-grid">
+            @foreach (var service in services)
+            {
+                <div class="service-card">
+                    @if (!string.IsNullOrEmpty(service.Icon))
+                    {
+                        <i class="fa @service.Icon service-icon"></i>
+                    }
+                    <h3>@service.Title</h3>
+                    <p>@service.Summary</p>
+                    <a asp-controller="Service" asp-action="Index" asp-route-serviceSlug="@service.Slug" class="btn btn-link">
+                        Learn More <i class="fa fa-arrow-right"></i>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="why-choose-us">
+    <div class="container">
+        <h2>Why Choose Wakes Autocare?</h2>
+        <div class="features-grid">
+            <div class="feature">
+                <i class="fa fa-certificate"></i>
+                <h3>Qualified Technicians</h3>
+                <p>IMI & ATA accredited with experience at Rolls Royce, BMW, Land Rover, VW, and Ford</p>
+            </div>
+            <div class="feature">
+                <i class="fa fa-clock"></i>
+                <h3>27 Years Experience</h3>
+                <p>Combined expertise in the automotive industry</p>
+            </div>
+            <div class="feature">
+                <i class="fa fa-truck"></i>
+                <h3>Mobile Service</h3>
+                <p>We come to you across the South Coast</p>
+            </div>
+            <div class="feature">
+                <i class="fa fa-star"></i>
+                <h3>Family Business</h3>
+                <p>Reliable, trustworthy service you can depend on</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+@if (caseStudies.Any())
+{
+    <section class="case-studies-section">
+        <div class="container">
+            <h2>Recent Work</h2>
+            <div class="case-studies-grid">
+                @foreach (var caseStudy in caseStudies)
+                {
+                    <div class="case-study-card">
+                        @if (!string.IsNullOrEmpty(caseStudy.FeaturedImage))
+                        {
+                            <img src="@caseStudy.FeaturedImage" alt="@caseStudy.Title" />
+                        }
+                        <h3>@caseStudy.Title</h3>
+                        <p>@caseStudy.Summary</p>
+                        <a asp-controller="CaseStudy" asp-action="Details" asp-route-slug="@caseStudy.Slug" class="btn btn-link">
+                            Read More <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </div>
+                }
+            </div>
+            <div class="text-center">
+                <a asp-controller="CaseStudy" asp-action="Index" class="btn btn-secondary">
+                    View All Case Studies
+                </a>
+            </div>
+        </div>
+    </section>
+}
+
+<section class="cta-section">
+    <div class="container">
+        <h2>Ready to get started?</h2>
+        <p>Contact us today for expert automotive service</p>
+        <div class="cta-actions">
+            <a href="tel:07544064878" class="btn btn-primary">
+                <i class="fa fa-phone"></i> 07544 064878
+            </a>
+            <a href="mailto:Wakesautocare@gmail.com" class="btn btn-secondary">
+                <i class="fa fa-envelope"></i> Email Us
+            </a>
+        </div>
+    </div>
+</section>

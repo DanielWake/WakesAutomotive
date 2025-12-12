@@ -1,0 +1,120 @@
+@model ServiceLocationPage
+@{
+    var h1 = Model.H1 ?? $"{Model.Service.Title} in {Model.Location.Name}";
+    var generatedContent = ViewBag.GeneratedContent as string ?? "";
+    var caseStudies = ViewBag.CaseStudies as List<CaseStudy> ?? new List<CaseStudy>();
+}
+
+<section class="page-header">
+    <div class="container">
+        <h1>@h1</h1>
+        <p>Professional @Model.Service.Title.ToLower() in @Model.Location.Name, @Model.Location.County</p>
+    </div>
+</section>
+
+<section class="service-location-content">
+    <div class="container">
+        <div class="content-main">
+            <article>
+                @if (!string.IsNullOrEmpty(Model.BodyHtml))
+                {
+                    @Html.Raw(Model.BodyHtml)
+                }
+                else if (!string.IsNullOrEmpty(generatedContent))
+                {
+                    @Html.Raw(generatedContent)
+                }
+                else
+                {
+                    <div class="default-content">
+                        <h2>Expert @Model.Service.Title in @Model.Location.Name</h2>
+                        <p>Looking for professional @Model.Service.Title.ToLower() in @Model.Location.Name? Wakes Autocare provides expert automotive services throughout @Model.Location.County and the South Coast.</p>
+
+                        <h3>Why Choose Wakes Autocare?</h3>
+                        <ul>
+                            <li><strong>IMI & ATA Accredited</strong> - Fully qualified technicians</li>
+                            <li><strong>27 Years Experience</strong> - Combined expertise in the industry</li>
+                            <li><strong>Brand Experience</strong> - Trained with Rolls Royce, BMW, Land Rover, VW, and Ford</li>
+                            <li><strong>Mobile Service</strong> - We come to you in @Model.Location.Name</li>
+                            <li><strong>Competitive Pricing</strong> - Quality service at fair prices</li>
+                        </ul>
+
+                        <h3>@Model.Service.Title Service</h3>
+                        <p>@Model.Service.Description</p>
+
+                        <h3>Serving @Model.Location.Name and Surrounding Areas</h3>
+                        <p>Based in Waterlooville, we're perfectly positioned to serve @Model.Location.Name and the surrounding areas. Our mobile service means we can come to your home or workplace at a time that suits you.</p>
+
+                        <h3>Get a Quote Today</h3>
+                        <p>Contact us for a free quote on @Model.Service.Title.ToLower() in @Model.Location.Name. We're here to help with all your automotive needs.</p>
+                    </div>
+                }
+
+                <div class="cta-box">
+                    <h3>Book Your Service in @Model.Location.Name</h3>
+                    <p>Call us today or send us a message to book your @Model.Service.Title.ToLower().</p>
+                    <div class="cta-buttons">
+                        <a href="tel:07544064878" class="btn btn-primary">
+                            <i class="fa fa-phone"></i> 07544 064878
+                        </a>
+                        <a asp-controller="Home" asp-action="Contact" class="btn btn-secondary">
+                            Get a Quote
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+            <aside class="sidebar">
+                <div class="sidebar-widget">
+                    <h3>Contact Us</h3>
+                    <p><i class="fa fa-phone"></i> <a href="tel:07544064878">07544 064878</a></p>
+                    <p><i class="fa fa-envelope"></i> <a href="mailto:Wakesautocare@gmail.com">Email Us</a></p>
+                </div>
+
+                <div class="sidebar-widget">
+                    <h3>Other Services</h3>
+                    <ul class="service-links">
+                        <li><a asp-controller="Service" asp-action="Index" asp-route-serviceSlug="diagnostics">Diagnostics</a></li>
+                        <li><a asp-controller="Service" asp-action="Index" asp-route-serviceSlug="servicing">Servicing</a></li>
+                        <li><a asp-controller="Service" asp-action="Index" asp-route-serviceSlug="clutch-replacement">Clutch Replacement</a></li>
+                        <li><a asp-controller="Service" asp-action="Index" asp-route-serviceSlug="timing-belt">Timing Belt</a></li>
+                        <li><a asp-controller="Service" asp-action="Index" asp-route-serviceSlug="repairs">Repairs</a></li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-widget">
+                    <h3>Service Areas</h3>
+                    <p>We serve @Model.Location.Name and throughout:</p>
+                    <ul class="location-links">
+                        <li>Portsmouth</li>
+                        <li>Waterlooville</li>
+                        <li>Fareham</li>
+                        <li>Havant</li>
+                        <li>Southampton</li>
+                        <li>And more...</li>
+                    </ul>
+                    <a asp-controller="Location" asp-action="List" class="btn btn-link">View All Areas</a>
+                </div>
+            </aside>
+        </div>
+
+        @if (caseStudies.Any())
+        {
+            <div class="related-case-studies">
+                <h2>Related Work</h2>
+                <div class="case-studies-grid">
+                    @foreach (var cs in caseStudies)
+                    {
+                        <div class="case-study-card">
+                            <h3>@cs.Title</h3>
+                            <p>@cs.Summary</p>
+                            <a asp-controller="CaseStudy" asp-action="Details" asp-route-slug="@cs.Slug" class="btn btn-link">
+                                Read More <i class="fa fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</section>

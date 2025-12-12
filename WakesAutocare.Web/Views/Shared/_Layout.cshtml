@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@(Context.Items["Title"] ?? "Wakes Autocare | Professional Vehicle Services")</title>
+    <meta name="description" content="@(Context.Items["Description"] ?? "Expert automotive services across the South Coast. IMI & ATA accredited technicians.")" />
+
+    @if (Context.Items["Canonical"] != null)
+    {
+        <link rel="canonical" href="@Context.Items["Canonical"]" />
+    }
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="@(Context.Items["Title"] ?? "Wakes Autocare")" />
+    <meta property="og:description" content="@(Context.Items["Description"] ?? "Expert automotive services")" />
+
+    <!-- Structured Data -->
+    @if (ViewData["JsonLd"] is string jsonLd)
+    {
+        <script type="application/ld+json">@Html.Raw(jsonLd)</script>
+    }
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="navbar-brand">
+                    <a href="/" class="logo">
+                        <img src="~/images/logo.jpg" alt="Wakes Autocare Logo" />
+                        <span>Wakes Autocare</span>
+                    </a>
+                </div>
+                <div class="navbar-menu">
+                    <a asp-controller="Home" asp-action="Index">Home</a>
+                    <div class="dropdown">
+                        <a href="#" class="dropbtn">Services <i class="fa fa-caret-down"></i></a>
+                        <div class="dropdown-content">
+                            <a asp-controller="Service" asp-action="Index" asp-route-serviceSlug="diagnostics">Diagnostics</a>
+                            <a asp-controller="Service" asp-action="Index" asp-route-serviceSlug="servicing">Servicing</a>
+                            <a asp-controller="Service" asp-action="Index" asp-route-serviceSlug="clutch-replacement">Clutch Replacement</a>
+                            <a asp-controller="Service" asp-action="Index" asp-route-serviceSlug="timing-belt">Timing Belt</a>
+                            <a asp-controller="Service" asp-action="Index" asp-route-serviceSlug="repairs">Repairs</a>
+                            <a asp-controller="Service" asp-action="Index" asp-route-serviceSlug="mobile-mechanic">Mobile Mechanic</a>
+                        </div>
+                    </div>
+                    <a asp-controller="Location" asp-action="List">Service Areas</a>
+                    <a asp-controller="CaseStudy" asp-action="Index">Case Studies</a>
+                    <a asp-controller="Home" asp-action="About">About</a>
+                    <a asp-controller="Home" asp-action="Contact">Contact</a>
+                </div>
+                <div class="navbar-contact">
+                    <a href="tel:07544064878" class="phone-link">
+                        <i class="fa fa-phone"></i> 07544 064878
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Wakes Autocare</h3>
+                    <p>Professional automotive services across the South Coast.</p>
+                    <p>IMI & ATA accredited technicians</p>
+                    <p>27 years combined experience</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a asp-controller="Service" asp-action="Index" asp-route-serviceSlug="diagnostics">Diagnostics</a></li>
+                        <li><a asp-controller="Service" asp-action="Index" asp-route-serviceSlug="servicing">Servicing</a></li>
+                        <li><a asp-controller="Service" asp-action="Index" asp-route-serviceSlug="clutch-replacement">Clutch Replacement</a></li>
+                        <li><a asp-controller="Service" asp-action="Index" asp-route-serviceSlug="timing-belt">Timing Belt</a></li>
+                        <li><a asp-controller="Service" asp-action="Index" asp-route-serviceSlug="mobile-mechanic">Mobile Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p><i class="fa fa-phone"></i> <a href="tel:07544064878">07544 064878</a></p>
+                    <p><i class="fa fa-envelope"></i> <a href="mailto:Wakesautocare@gmail.com">Wakesautocare@gmail.com</a></p>
+                    <p><i class="fa fa-map-marker-alt"></i> Waterlooville, Portsmouth</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Service Areas</h3>
+                    <p>Portsmouth, Waterlooville, Fareham, Havant, Gosport, Southampton, and across the South Coast</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; @DateTime.Now.Year Wakes Autocare. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
