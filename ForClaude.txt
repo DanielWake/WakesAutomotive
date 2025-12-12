@@ -1,0 +1,18 @@
+Hi Claude, please read the question I asked of an AI agent in the Question.txt file. It's response had been documented in the Answer.txt file. Basic company information has been added to the CompanyInformation.txt file.
+
+The Images folder contains three logos they have used on their facebook page, which I can reside if required. It also contains a banner they use on their facebook page.
+
+The Advert folder contains two adverts (1 and 2) they have posted on facebook, with text.txt files containing the text used.
+
+The CaseStudies folder contains folders for different aspects of their work, with the content of the post detailed in text.txt files and the images appropriately named where possible to relate to the elements in the text.
+
+I would like you to generate them a website based on the initial idea in the Question.txt file.
+
+I am a c# developer that knows html and css, I am familiar with MVC and Blazor.
+
+Review the AI response and come up with an alternate plan if needs be.
+
+Lets grow their business!
+
+I require you to document everything future claude needs into a project-brief file, so they may be pointed to it at the start of every session.
+If you feel it is worthwhile creating additional files, to document the tasks or functionality required to build the application, make sure the project knows it of the new files existence, its purpose, whether it is a single source of truth and what actions should cause it to be updated.
