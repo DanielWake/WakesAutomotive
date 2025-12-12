@@ -1,0 +1,51 @@
+@model List<CaseStudy>
+
+<section class="page-header">
+    <div class="container">
+        <h1>Case Studies</h1>
+        <p>Real examples of our automotive work across the South Coast</p>
+    </div>
+</section>
+
+<section class="case-studies-list">
+    <div class="container">
+        <div class="intro">
+            <p>See the quality of our work through these real examples. From diagnostics to major repairs, we document our work to show the high standards we maintain.</p>
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="no-content">
+                <p>Case studies coming soon! Check back to see examples of our recent work.</p>
+            </div>
+        }
+        else
+        {
+            <div class="case-studies-grid">
+                @foreach (var caseStudy in Model)
+                {
+                    <div class="case-study-card">
+                        @if (!string.IsNullOrEmpty(caseStudy.FeaturedImage))
+                        {
+                            <div class="case-study-image">
+                                <img src="@caseStudy.FeaturedImage" alt="@caseStudy.Title" />
+                            </div>
+                        }
+                        <div class="case-study-content">
+                            @if (caseStudy.Service != null)
+                            {
+                                <span class="service-tag">@caseStudy.Service.Title</span>
+                            }
+                            <h3>@caseStudy.Title</h3>
+                            <p class="date"><i class="fa fa-calendar"></i> @caseStudy.DatePublished.ToString("MMMM dd, yyyy")</p>
+                            <p class="summary">@caseStudy.Summary</p>
+                            <a asp-controller="CaseStudy" asp-action="Details" asp-route-slug="@caseStudy.Slug" class="btn btn-link">
+                                Read Full Case Study <i class="fa fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>

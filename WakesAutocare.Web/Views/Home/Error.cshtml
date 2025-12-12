@@ -1,0 +1,36 @@
+<section class="page-header error-header">
+    <div class="container">
+        <h1>Oops! Something went wrong</h1>
+    </div>
+</section>
+
+<section class="error-content">
+    <div class="container">
+        <div class="error-message">
+            <i class="fa fa-exclamation-triangle"></i>
+            <h2>We're sorry, but something went wrong.</h2>
+            <p>The page you're looking for may have been moved or doesn't exist.</p>
+
+            <div class="error-actions">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-primary">
+                    <i class="fa fa-home"></i> Go to Home Page
+                </a>
+                <a asp-controller="Home" asp-action="Contact" class="btn btn-secondary">
+                    <i class="fa fa-envelope"></i> Contact Us
+                </a>
+            </div>
+        </div>
+
+        <div class="helpful-links">
+            <h3>You might be looking for:</h3>
+            <ul>
+                <li><a asp-controller="Service" asp-action="Index" asp-route-serviceSlug="diagnostics">Vehicle Diagnostics</a></li>
+                <li><a asp-controller="Service" asp-action="Index" asp-route-serviceSlug="servicing">Car Servicing</a></li>
+                <li><a asp-controller="Service" asp-action="Index" asp-route-serviceSlug="mobile-mechanic">Mobile Mechanic</a></li>
+                <li><a asp-controller="Location" asp-action="List">Service Areas</a></li>
+                <li><a asp-controller="CaseStudy" asp-action="Index">Case Studies</a></li>
+                <li><a asp-controller="Home" asp-action="About">About Us</a></li>
+            </ul>
+        </div>
+    </div>
+</section>

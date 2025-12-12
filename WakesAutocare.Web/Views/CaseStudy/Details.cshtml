@@ -1,0 +1,101 @@
+@model CaseStudy
+@{
+    var relatedCaseStudies = ViewBag.RelatedCaseStudies as List<CaseStudy> ?? new List<CaseStudy>();
+}
+
+<section class="page-header">
+    <div class="container">
+        @if (Model.Service != null)
+        {
+            <div class="breadcrumb">
+                <a asp-controller="CaseStudy" asp-action="Index">Case Studies</a> /
+                <span>@Model.Service.Title</span>
+            </div>
+        }
+        <h1>@Model.Title</h1>
+        <p class="date"><i class="fa fa-calendar"></i> @Model.DatePublished.ToString("MMMM dd, yyyy")</p>
+    </div>
+</section>
+
+<section class="case-study-content">
+    <div class="container">
+        <article>
+            @if (!string.IsNullOrEmpty(Model.FeaturedImage))
+            {
+                <div class="featured-image">
+                    <img src="@Model.FeaturedImage" alt="@Model.Title" />
+                </div>
+            }
+
+            <div class="case-study-body">
+                @if (!string.IsNullOrEmpty(Model.Summary))
+                {
+                    <div class="summary">
+                        <strong>@Model.Summary</strong>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(Model.Content))
+                {
+                    <div class="content">
+                        @Html.Raw(Model.Content)
+                    </div>
+                }
+
+                @if (Model.Service != null)
+                {
+                    <div class="service-info">
+                        <h3>Service Performed</h3>
+                        <p><strong>@Model.Service.Title</strong></p>
+                        <p>@Model.Service.Summary</p>
+                        <a asp-controller="Service" asp-action="Index" asp-route-serviceSlug="@Model.Service.Slug" class="btn btn-link">
+                            Learn more about @Model.Service.Title <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </div>
+                }
+            </div>
+
+            <div class="cta-box">
+                <h3>Need Similar Work?</h3>
+                <p>Contact us today to discuss your automotive needs</p>
+                <div class="cta-buttons">
+                    <a href="tel:07544064878" class="btn btn-primary">
+                        <i class="fa fa-phone"></i> Call 07544 064878
+                    </a>
+                    <a asp-controller="Home" asp-action="Contact" class="btn btn-secondary">
+                        Get a Quote
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        @if (relatedCaseStudies.Any())
+        {
+            <div class="related-case-studies">
+                <h2>Related Case Studies</h2>
+                <div class="case-studies-grid">
+                    @foreach (var related in relatedCaseStudies)
+                    {
+                        <div class="case-study-card">
+                            @if (!string.IsNullOrEmpty(related.FeaturedImage))
+                            {
+                                <img src="@related.FeaturedImage" alt="@related.Title" />
+                            }
+                            <h3>@related.Title</h3>
+                            <p>@related.Summary</p>
+                            <a asp-controller="CaseStudy" asp-action="Details" asp-route-slug="@related.Slug" class="btn btn-link">
+                                Read More <i class="fa fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
+        <div class="back-link">
+            <a asp-controller="CaseStudy" asp-action="Index" class="btn btn-secondary">
+                <i class="fa fa-arrow-left"></i> Back to All Case Studies
+            </a>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,56 @@
+@model List<Location>
+
+<section class="page-header">
+    <div class="container">
+        <h1>Service Areas</h1>
+        <p>We serve Portsmouth, Waterlooville, and the entire South Coast</p>
+    </div>
+</section>
+
+<section class="locations-list">
+    <div class="container">
+        <div class="intro">
+            <h2>Where We Work</h2>
+            <p>Based in Waterlooville, we provide professional automotive services across Hampshire and West Sussex. Our mobile service means we can come to you wherever you are on the South Coast.</p>
+        </div>
+
+        <div class="locations-by-county">
+            @foreach (var county in Model.GroupBy(l => l.County).OrderBy(g => g.Key))
+            {
+                <div class="county-section">
+                    <h3>@county.Key</h3>
+                    <div class="locations-grid">
+                        @foreach (var location in county.OrderBy(l => l.Name))
+                        {
+                            <div class="location-card">
+                                <h4>@location.Name</h4>
+                                @if (!string.IsNullOrEmpty(location.PostcodePrefix))
+                                {
+                                    <p class="postcode"><i class="fa fa-map-pin"></i> @location.PostcodePrefix</p>
+                                }
+                                <a asp-controller="Location" asp-action="Index" asp-route-locationSlug="@location.Slug" class="btn btn-link">
+                                    View Services in @location.Name <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="mobile-service-info">
+            <div class="info-box">
+                <i class="fa fa-truck"></i>
+                <h3>Mobile Service Available</h3>
+                <p>Can't get to us? No problem! Our mobile service covers the entire South Coast. We'll come to your home or workplace at a time that suits you.</p>
+                <a href="tel:07544064878" class="btn btn-primary">
+                    <i class="fa fa-phone"></i> Call 07544 064878
+                </a>
+            </div>
+        </div>
+
+        <div class="coverage-note">
+            <p><strong>Don't see your area listed?</strong> We may still be able to help! Contact us to discuss your location and we'll do our best to accommodate you.</p>
+        </div>
+    </div>
+</section>

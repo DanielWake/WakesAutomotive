@@ -1,0 +1,103 @@
+@model Service
+@{
+    var locations = ViewBag.Locations as List<Location> ?? new List<Location>();
+    var caseStudies = ViewBag.CaseStudies as List<CaseStudy> ?? new List<CaseStudy>();
+}
+
+<section class="page-header">
+    <div class="container">
+        <h1>@Model.Title</h1>
+        <p>@Model.Summary</p>
+    </div>
+</section>
+
+<section class="service-content">
+    <div class="container">
+        <div class="service-main">
+            <article>
+                <h2>Professional @Model.Title Across the South Coast</h2>
+
+                @if (!string.IsNullOrEmpty(Model.Description))
+                {
+                    <div class="service-description">
+                        @Html.Raw(Model.Description)
+                    </div>
+                }
+                else
+                {
+                    <p>Wakes Autocare provides expert @Model.Title.ToLower() services across Portsmouth, Waterlooville, and the entire South Coast region.</p>
+
+                    <h3>Why Choose Our @Model.Title Service?</h3>
+                    <ul>
+                        <li><strong>IMI & ATA Accredited Technicians</strong> - Fully qualified and experienced</li>
+                        <li><strong>27 Years Combined Experience</strong> - Extensive industry knowledge</li>
+                        <li><strong>Premium Brand Training</strong> - Rolls Royce, BMW, Land Rover, VW, Ford</li>
+                        <li><strong>Mobile Service Available</strong> - We come to you</li>
+                        <li><strong>Competitive Pricing</strong> - Quality service at fair rates</li>
+                        <li><strong>Fully Insured</strong> - Complete peace of mind</li>
+                    </ul>
+
+                    <h3>Our Approach</h3>
+                    <p>We take pride in delivering professional @Model.Title.ToLower() with attention to detail. Using the latest diagnostic equipment and genuine parts, we ensure your vehicle receives the best possible care.</p>
+                </div>
+                }
+
+                <div class="cta-box">
+                    <h3>Get a Quote for @Model.Title</h3>
+                    <p>Contact us today for professional @Model.Title.ToLower() service.</p>
+                    <div class="cta-buttons">
+                        <a href="tel:07544064878" class="btn btn-primary">
+                            <i class="fa fa-phone"></i> Call 07544 064878
+                        </a>
+                        <a asp-controller="Home" asp-action="Contact" class="btn btn-secondary">
+                            Get a Quote
+                        </a>
+                    </div>
+                </div>
+
+                <h2>Service Areas for @Model.Title</h2>
+                <p>We provide @Model.Title.ToLower() services across the following areas:</p>
+
+                <div class="locations-grid">
+                    @foreach (var location in locations)
+                    {
+                        <div class="location-card">
+                            <h3>@Model.Title in @location.Name</h3>
+                            <p>@location.County</p>
+                            <a asp-controller="Service"
+                               asp-action="Location"
+                               asp-route-serviceSlug="@Model.Slug"
+                               asp-route-locationSlug="@location.Slug"
+                               class="btn btn-link">
+                                View Details <i class="fa fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    }
+                </div>
+            </article>
+        </div>
+
+        @if (caseStudies.Any())
+        {
+            <div class="related-case-studies">
+                <h2>Related Work - @Model.Title</h2>
+                <div class="case-studies-grid">
+                    @foreach (var cs in caseStudies)
+                    {
+                        <div class="case-study-card">
+                            @if (!string.IsNullOrEmpty(cs.FeaturedImage))
+                            {
+                                <img src="@cs.FeaturedImage" alt="@cs.Title" />
+                            }
+                            <h3>@cs.Title</h3>
+                            <p>@cs.Summary</p>
+                            <a asp-controller="CaseStudy" asp-action="Details" asp-route-slug="@cs.Slug" class="btn btn-link">
+                                Read More <i class="fa fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</section>

@@ -1,0 +1,107 @@
+@model Location
+@{
+    var services = ViewBag.Services as List<Service> ?? new List<Service>();
+    var nearbyLocations = ViewBag.NearbyLocations as List<Location> ?? new List<Location>();
+}
+
+<section class="page-header">
+    <div class="container">
+        <h1>Car Servicing & Repairs in @Model.Name</h1>
+        <p>Professional automotive services in @Model.Name, @Model.County</p>
+    </div>
+</section>
+
+<section class="location-content">
+    <div class="container">
+        <article>
+            <h2>Expert Automotive Services in @Model.Name</h2>
+
+            @if (!string.IsNullOrEmpty(Model.Description))
+            {
+                <div class="location-description">
+                    @Html.Raw(Model.Description)
+                </div>
+            }
+            else
+            {
+                <p>Welcome to Wakes Autocare's @Model.Name service page. We're proud to serve the @Model.Name area with professional automotive services, backed by 27 years of combined experience and full IMI & ATA accreditation.</p>
+
+                <p>Whether you're in @Model.Name town centre or the surrounding @Model.County area, our mobile service can come to you, or you can visit our workshop in Waterlooville.</p>
+            }
+
+            <h3>Why Choose Wakes Autocare in @Model.Name?</h3>
+            <div class="features-grid">
+                <div class="feature">
+                    <i class="fa fa-map-marker-alt"></i>
+                    <h4>Local Service</h4>
+                    <p>Serving @Model.Name and @Model.County</p>
+                </div>
+                <div class="feature">
+                    <i class="fa fa-truck"></i>
+                    <h4>Mobile Service</h4>
+                    <p>We come to you in @Model.Name</p>
+                </div>
+                <div class="feature">
+                    <i class="fa fa-certificate"></i>
+                    <h4>Fully Qualified</h4>
+                    <p>IMI & ATA accredited technicians</p>
+                </div>
+                <div class="feature">
+                    <i class="fa fa-star"></i>
+                    <h4>Experienced</h4>
+                    <p>27 years combined experience</p>
+                </div>
+            </div>
+
+            <h2>Our Services in @Model.Name</h2>
+            <p>We offer a full range of automotive services to customers in @Model.Name:</p>
+
+            <div class="services-grid">
+                @foreach (var service in services)
+                {
+                    <div class="service-card">
+                        @if (!string.IsNullOrEmpty(service.Icon))
+                        {
+                            <i class="fa @service.Icon service-icon"></i>
+                        }
+                        <h3>@service.Title</h3>
+                        <p>@service.Summary</p>
+                        <a asp-controller="Service"
+                           asp-action="Location"
+                           asp-route-serviceSlug="@service.Slug"
+                           asp-route-locationSlug="@Model.Slug"
+                           class="btn btn-link">
+                            @service.Title in @Model.Name <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </div>
+                }
+            </div>
+
+            <div class="cta-box">
+                <h3>Book Your Service in @Model.Name</h3>
+                <p>Contact us today for expert automotive service in @Model.Name, @Model.County</p>
+                <div class="cta-buttons">
+                    <a href="tel:07544064878" class="btn btn-primary">
+                        <i class="fa fa-phone"></i> Call 07544 064878
+                    </a>
+                    <a asp-controller="Home" asp-action="Contact" class="btn btn-secondary">
+                        Get a Quote
+                    </a>
+                </div>
+            </div>
+
+            @if (nearbyLocations.Any())
+            {
+                <h3>We Also Serve Areas Near @Model.Name</h3>
+                <div class="nearby-locations">
+                    @foreach (var nearby in nearbyLocations)
+                    {
+                        <a asp-controller="Location" asp-action="Index" asp-route-locationSlug="@nearby.Slug" class="location-link">
+                            @nearby.Name
+                        </a>
+                    }
+                </div>
+            }
+        </article>
+    </div>
+</section>
