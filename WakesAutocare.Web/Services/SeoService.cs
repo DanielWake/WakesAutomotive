@@ -77,7 +77,7 @@ public class SeoService : ISeoService
                 new
                 {
                     type = "OpeningHoursSpecification",
-                    dayOfWeek = "Saturday",
+                    dayOfWeek = new[] { "Saturday" },
                     opens = "08:00",
                     closes = "13:00"
                 }
