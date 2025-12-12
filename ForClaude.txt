@@ -12,6 +12,8 @@ I am a c# developer that knows html and css, I am familiar with MVC and Blazor.
 
 Review the AI response and come up with an alternate plan if needs be.
 
+The documents within CaseStudies and Adverts should give a better understanding of the work the business carries out.
+
 Lets grow their business!
 
 I require you to document everything future claude needs into a project-brief file, so they may be pointed to it at the start of every session.
