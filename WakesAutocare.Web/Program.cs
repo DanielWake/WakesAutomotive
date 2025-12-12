@@ -24,13 +24,17 @@ builder.Services.AddScoped<IContentService, ContentService>();
 
 var app = builder.Build();
 
-// Seed the database with case studies
+// Seed the database
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     try
     {
         var context = services.GetRequiredService<AppDbContext>();
+
+        // Seed in order: content snippets first, then pages, then case studies
+        await ContentSnippetSeeder.SeedContentSnippets(context);
+        await ServiceLocationPageSeeder.SeedServiceLocationPages(context);
         await CaseStudySeeder.SeedCaseStudies(context);
     }
     catch (Exception ex)
