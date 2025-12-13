@@ -30,6 +30,7 @@ public static class CaseStudySeeder
                             <li>Road test and quality assurance</li>
                           </ul>
                           <p>If you need clutch work, drop us a message for any enquiries. We're also happy to provide free advice.</p>",
+                FeaturedImage = "/images/case-studies/new-clutch.jpg",
                 ServiceId = 3, // Clutch Replacement
                 IsFeatured = true,
                 IsPublished = true,
@@ -53,6 +54,8 @@ public static class CaseStudySeeder
                           </ul>
                           <p><strong>Got a wet belt that needs replacing? Been advised you need to sell your car?</strong> Drop us a message and we will see how we can help.</p>
                           <p>Don't give up on your vehicle - we specialize in these complex repairs that other garages might shy away from.</p>",
+                FeaturedImage = "/images/case-studies/1.jpg",
+                Images = "['/images/case-studies/1.jpg','/images/case-studies/2.jpg','/images/case-studies/3.jpg','/images/case-studies/4.jpg','/images/case-studies/5.jpg','/images/case-studies/6.jpg','/images/case-studies/7.jpg','/images/case-studies/8.jpg']",
                 ServiceId = 4, // Timing Belt
                 IsFeatured = true,
                 IsPublished = true,
@@ -75,6 +78,7 @@ public static class CaseStudySeeder
                             <li>Correct spec oil ✅</li>
                           </ul>
                           <p>Another happy customer! We go the extra mile to accommodate our customers' schedules, even if that means working on Sunday mornings.</p>",
+                FeaturedImage = "/images/case-studies/ford-puma-bonnet-up.jpg",
                 ServiceId = 2, // Servicing
                 IsFeatured = true,
                 IsPublished = true,
@@ -95,6 +99,7 @@ public static class CaseStudySeeder
                           </ul>
                           <p>Can't get to a garage? No problem. Our fully-equipped mobile service means you don't have to disrupt your day. We'll come to your home or workplace at a time that suits you.</p>
                           <p>Drop us a message to get your service booked in!</p>",
+                FeaturedImage = "/images/case-studies/mazda-bonnet-open.jpg",
                 ServiceId = 6, // Mobile Mechanic
                 IsFeatured = false,
                 IsPublished = true,
@@ -118,6 +123,8 @@ public static class CaseStudySeeder
                             <li>BMW 3 series M Sport - Light fault traced to burnt out earth</li>
                           </ul>
                           <p>Pre-purchase inspections can save you from expensive surprises. Get your peace of mind before committing to a purchase.</p>",
+                FeaturedImage = "/images/case-studies/audi-q5-bonnet-up.jpg",
+                Images = "['/images/case-studies/audi-q5-bonnet-up.jpg','/images/case-studies/disconnected-seatbelt.jpg','/images/case-studies/audi-a4-coilover.jpg','/images/case-studies/mercedes-service.jpg']",
                 ServiceId = 8, // Pre-Purchase Inspection
                 IsFeatured = false,
                 IsPublished = true,
@@ -142,6 +149,8 @@ public static class CaseStudySeeder
                             <li>Full electrical system check</li>
                           </ul>
                           <p>One happy customer back on the road! Proper diagnostics save time and money by identifying all issues, not just the obvious ones.</p>",
+                FeaturedImage = "/images/case-studies/vauxhal-vivaro-bonnet-open.jpg",
+                Images = "['/images/case-studies/vauxhal-vivaro-bonnet-open.jpg','/images/case-studies/old-and-new-starter-motor.jpg']",
                 ServiceId = 1, // Diagnostics
                 IsFeatured = false,
                 IsPublished = true,
