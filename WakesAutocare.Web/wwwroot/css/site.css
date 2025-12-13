@@ -1,8 +1,8 @@
 /* Wakes Autocare - Main Stylesheet */
 
 :root {
-    --primary-color: #c8102e;
-    --primary-dark: #a00d26;
+    --primary-color: #0033A0; /* Portsmouth FC Blue (Pompey Blue) */
+    --primary-dark: #001f5c;
     --secondary-color: #1a1a1a;
     --accent-color: #f39c12;
     --text-color: #333;
@@ -282,6 +282,19 @@ header {
 .btn-secondary:hover {
     background: var(--white);
     color: var(--primary-color);
+}
+
+/* Secondary button for light backgrounds */
+.btn-secondary-dark {
+    background: var(--primary-color);
+    color: var(--white);
+    border: 2px solid var(--primary-color);
+}
+
+.btn-secondary-dark:hover {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+    transform: translateY(-2px);
 }
 
 .btn-link {

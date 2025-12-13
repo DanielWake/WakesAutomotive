@@ -84,7 +84,8 @@ public class SeoService : ISeoService
             },
             sameAs = new[]
             {
-                "https://www.facebook.com/p/Wakes-Autocare-61570327228094/"
+                "https://www.facebook.com/p/Wakes-Autocare-61570327228094/",
+                "https://www.instagram.com/wakesautocare/"
             }
         };
 
