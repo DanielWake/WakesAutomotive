@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WakesAutocare.Web.Data;
+using WakesAutocare.Web.Models;
 using WakesAutocare.Web.Services;
 
 namespace WakesAutocare.Web.Controllers;
@@ -9,11 +10,19 @@ public class HomeController : Controller
 {
     private readonly AppDbContext _context;
     private readonly ISeoService _seoService;
+    private readonly IEmailService _emailService;
+    private readonly ILogger<HomeController> _logger;
 
-    public HomeController(AppDbContext context, ISeoService seoService)
+    public HomeController(
+        AppDbContext context,
+        ISeoService seoService,
+        IEmailService emailService,
+        ILogger<HomeController> logger)
     {
         _context = context;
         _seoService = seoService;
+        _emailService = emailService;
+        _logger = logger;
     }
 
     public async Task<IActionResult> Index()
@@ -68,11 +77,43 @@ public class HomeController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Contact(string name, string email, string phone, string message)
+    public async Task<IActionResult> Contact(string name, string email, string? phone, string message)
     {
-        // TODO: Implement contact form submission (email sending, database logging, etc.)
-        // For now, just redirect with success message
-        TempData["SuccessMessage"] = "Thank you for contacting us! We'll get back to you soon.";
+        if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(message))
+        {
+            TempData["ErrorMessage"] = "Please fill in all required fields.";
+            return RedirectToAction(nameof(Contact));
+        }
+
+        try
+        {
+            // Save contact message to database
+            var contactMessage = new ContactMessage
+            {
+                Name = name.Trim(),
+                Email = email.Trim(),
+                Phone = phone?.Trim(),
+                Message = message.Trim(),
+                DateSubmitted = DateTime.UtcNow,
+                IpAddress = HttpContext.Connection.RemoteIpAddress?.ToString()
+            };
+
+            _context.ContactMessages.Add(contactMessage);
+            await _context.SaveChangesAsync();
+
+            // Send email notification
+            await _emailService.SendContactFormEmailAsync(name, email, phone, message);
+
+            _logger.LogInformation("Contact form submitted successfully by {Email}", email);
+
+            TempData["SuccessMessage"] = "Thank you for contacting us! We'll get back to you soon.";
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error processing contact form submission");
+            TempData["ErrorMessage"] = "There was an error submitting your message. Please try again or call us directly.";
+        }
+
         return RedirectToAction(nameof(Contact));
     }
 

@@ -1,4 +1,12 @@
+# robots.txt for Wakes Autocare
+# Professional automotive services in Portsmouth and the South Coast
+
 User-agent: *
 Allow: /
 
+# Sitemap
 Sitemap: https://www.wakesautocare.co.uk/sitemap.xml
+
+# Disallow admin areas (when implemented)
+Disallow: /admin/
+Disallow: /Admin/

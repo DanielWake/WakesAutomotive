@@ -14,6 +14,7 @@ public class AppDbContext : DbContext
     public DbSet<ServiceLocationPage> ServiceLocationPages { get; set; } = null!;
     public DbSet<CaseStudy> CaseStudies { get; set; } = null!;
     public DbSet<ContentSnippet> ContentSnippets { get; set; } = null!;
+    public DbSet<ContactMessage> ContactMessages { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -82,6 +83,17 @@ public class AppDbContext : DbContext
                 .WithMany()
                 .HasForeignKey(e => e.LocationId)
                 .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        // ContactMessage entity configuration
+        modelBuilder.Entity<ContactMessage>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.Email).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.Message).IsRequired().HasMaxLength(2000);
+            entity.Property(e => e.DateSubmitted).HasDefaultValueSql("GETUTCDATE()");
+            entity.HasIndex(e => e.DateSubmitted);
         });
 
         // Seed initial data

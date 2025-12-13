@@ -625,6 +625,15 @@ article ul li {
     border: 1px solid #c3e6cb;
 }
 
+.alert-error {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 15px 20px;
+    border-radius: 6px;
+    margin-bottom: 25px;
+    border: 1px solid #f5c6cb;
+}
+
 /* ============================================
    FOOTER (STICKY)
    ============================================ */

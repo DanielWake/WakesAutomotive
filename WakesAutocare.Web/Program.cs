@@ -21,6 +21,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Register custom services
 builder.Services.AddScoped<ISeoService, SeoService>();
 builder.Services.AddScoped<IContentService, ContentService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 var app = builder.Build();
 

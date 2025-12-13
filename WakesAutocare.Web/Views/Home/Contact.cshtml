@@ -13,6 +13,12 @@
                 @TempData["SuccessMessage"]
             </div>
         }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-error">
+                @TempData["ErrorMessage"]
+            </div>
+        }
 
         <div class="contact-grid">
             <div class="contact-info">
