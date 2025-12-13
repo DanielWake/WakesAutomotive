@@ -35,7 +35,9 @@ using (var scope = app.Services.CreateScope())
         // Seed in order: content snippets first, then pages, then case studies
         await ContentSnippetSeeder.SeedContentSnippets(context);
         await ServiceLocationPageSeeder.SeedServiceLocationPages(context);
-        await CaseStudySeeder.SeedCaseStudies(context);
+
+        // Clear and reseed case studies to get updated images
+        await DatabaseCleaner.ClearAndReseedCaseStudies(context);
     }
     catch (Exception ex)
     {
