@@ -84,7 +84,7 @@ public class SeoService : ISeoService
             },
             sameAs = new[]
             {
-                "https://www.facebook.com/wakesautocare" // Update with actual social media
+                "https://www.facebook.com/p/Wakes-Autocare-61570327228094/"
             }
         };
 
