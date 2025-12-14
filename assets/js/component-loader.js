@@ -5,7 +5,7 @@
 
 class ComponentLoader {
     constructor() {
-        this.componentsPath = '/public/views/components/';
+        this.componentsPath = '/views/components/';
         this.loadedComponents = new Map();
     }
 

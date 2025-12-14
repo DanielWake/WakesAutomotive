@@ -229,7 +229,7 @@ main {
 
 .hero-section {
     background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-                url('/public/assets/images/banner-1.jpg') center/cover;
+                url('/assets/images/banner-1.jpg') center/cover;
     color: var(--color-secondary);
     text-align: center;
     padding: 6rem 1rem;
